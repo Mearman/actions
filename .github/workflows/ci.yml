@@ -16,3 +16,37 @@ jobs:
         with:
           fetch-depth: 0
       - uses: Mearman/actions/.github/actions/commitlint@commitlint-v1
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck yamllint
+          curl -sL -o actionlint.tar.gz \
+            https://github.com/rhysd/actionlint/releases/download/v1.7.7/actionlint_1.7.7_linux_amd64.tar.gz
+          tar -xzf actionlint.tar.gz actionlint
+      - name: Lint workflows
+        run: ./actionlint -color
+      - name: Lint workflow YAML
+        run: yamllint .github/workflows/
+
+  workspace-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Validate the workspace configuration
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm exec semantic-release-workspace release --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
