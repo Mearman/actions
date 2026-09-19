@@ -1,0 +1,4 @@
+packages:
+  - .github/actions/*
+minimumReleaseAgeExclude:
+  - '@exadev/semantic-release-workspace@2.2.0'
