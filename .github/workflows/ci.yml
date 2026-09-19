@@ -15,4 +15,4 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: Mearman/actions/.github/actions/commitlint@ci/v1
+      - uses: Mearman/actions/.github/actions/commitlint@commitlint-v1
