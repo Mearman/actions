@@ -53,7 +53,7 @@ jobs:
             major=$(printf '%s' "$latest" | grep -oE "^${name}-v[0-9]+")
             echo "floating ${major} -> ${latest}"
             git tag -f "$major" "$latest"
-            git push -q -f origin "$major"
+            git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$major"
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
