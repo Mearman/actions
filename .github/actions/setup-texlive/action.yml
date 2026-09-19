@@ -1,0 +1,32 @@
+name: setup-texlive
+description: Cache and install the TeX Live toolchain shared by the bangor repositories. The apt download cache persists between runs so repeat installs skip the network.
+inputs:
+  profile:
+    description: full installs the complete TeX Live set; lint installs only the formatting and lint tools.
+    default: full
+  extra:
+    description: Extra apt packages appended to the profile set.
+    default: ''
+runs:
+  using: composite
+  steps:
+    - name: Cache apt archives
+      uses: actions/cache@v4
+      with:
+        path: ~/apt-archives
+        key: apt-${{ runner.os }}-${{ inputs.profile }}-v1
+    - name: Install
+      shell: bash
+      run: |
+        mkdir -p /home/runner/apt-archives
+        sudo apt-get update
+        if [ "${{ inputs.profile }}" = "lint" ]; then
+          sudo apt-get install -y -o Dir::Cache::archives=/home/runner/apt-archives \
+            texlive-extra-utils chktex yamllint ${{ inputs.extra }}
+        else
+          sudo apt-get install -y -o Dir::Cache::archives=/home/runner/apt-archives \
+            texlive-latex-base texlive-latex-recommended \
+            texlive-latex-extra texlive-fonts-recommended \
+            texlive-bibtex-extra texlive-extra-utils biber latexmk ${{ inputs.extra }}
+        fi
+        sudo chown -R $USER: /home/runner/apt-archives

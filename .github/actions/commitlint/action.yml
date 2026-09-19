@@ -1,0 +1,17 @@
+name: commitlint
+description: Check commit messages against the conventional commit rules shared by the bangor repositories. The rules file ships with this action and is copied into place, so repositories no longer carry their own copy.
+runs:
+  using: composite
+  steps:
+    - name: Cache npm
+      uses: actions/cache@v4
+      with:
+        path: ~/.npm
+        key: npm-commitlint-v1
+    - name: Install rules
+      shell: bash
+      run: cp "${{ github.action_path }}/commitlint.config.mjs" ./commitlint.config.mjs
+    - name: Check commit messages
+      shell: bash
+      run: |
+        npx --yes @commitlint/cli@19 --from "$(git rev-list --max-parents=0 HEAD | tail -1)" --to HEAD
