@@ -30,8 +30,8 @@ jobs:
           fetch-depth: 0
       - name: Check the fixture commit message
         run: |
-          # The checkout's own HEAD carries this workflow's commit, whose message is conventional by construction (the
-          # hooks enforce it), so running the real action against it exercises the full commitlint path: config copy, npm
-          # cache, range scan.
+          # The checkout's own HEAD message is conventional by
+          # construction, so the real action below exercises the
+          # full commitlint path: config, cache, and range scan.
           echo "fixture: the action itself asserts HEAD below"
       - uses: Mearman/actions/.github/actions/commitlint@commitlint-v1
