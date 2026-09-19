@@ -1,0 +1,37 @@
+name: Smoke
+
+# Exercises each composite action against a trivial fixture, so the actions are tested where they live rather
+# than only incidentally through consumer repositories.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  setup-texlive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Mearman/actions/.github/actions/setup-texlive@setup-texlive-v1
+      - name: Compile a trivial document
+        run: |
+          printf '\\documentclass{article}\\begin{document}word\\end{document}\n' > smoke.tex
+          latexmk -pdf -interaction=nonstopmode smoke.tex
+          test -s smoke.pdf
+
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check the fixture commit message
+        run: |
+          # The checkout's own HEAD carries this workflow's commit, whose message is conventional by construction (the
+          # hooks enforce it), so running the real action against it exercises the full commitlint path: config copy, npm
+          # cache, range scan.
+          echo "fixture: the action itself asserts HEAD below"
+      - uses: Mearman/actions/.github/actions/commitlint@commitlint-v1
