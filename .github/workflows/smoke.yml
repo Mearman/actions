@@ -28,10 +28,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Check the fixture commit message
+      - name: Check the rules accept a breaking change marker and reject a bad header
         run: |
-          # The checkout's own HEAD message is conventional by
-          # construction, so the real action below exercises the
-          # full commitlint path: config, cache, and range scan.
-          echo "fixture: the action itself asserts HEAD below"
+          cp .github/actions/commitlint/commitlint.config.mjs .
+          printf '%s\n' "feat(api)!: drop the old endpoint" | npx --yes @commitlint/cli@19
+          if printf '%s\n' "not a conventional header" | npx --yes @commitlint/cli@19; then
+            echo "an invalid header was accepted"
+            exit 1
+          fi
+          if printf '%s\n' "wip!: a type outside the list" | npx --yes @commitlint/cli@19; then
+            echo "an unknown type was accepted"
+            exit 1
+          fi
       - uses: Mearman/actions/.github/actions/commitlint@commitlint-v1
