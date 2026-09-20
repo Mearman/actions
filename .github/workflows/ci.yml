@@ -49,6 +49,6 @@ jobs:
       - name: Validate the workspace configuration
         run: |
           pnpm install --frozen-lockfile
-          pnpm exec semantic-release-workspace release --dry-run
+          pnpm exec semantic-release-workspace release --dry-run --config semantic-release-workspace.config.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
