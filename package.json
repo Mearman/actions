@@ -2,7 +2,7 @@
   "name": "actions-workspace",
   "private": true,
   "devDependencies": {
-    "@exadev/semantic-release-workspace": "2.2.0",
+    "@exadev/semantic-release-workspace": "3.1.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.0",
     "@semantic-release/git": "^10.0.1",
