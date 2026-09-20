@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/Mearman/actions/compare/commitlint@1.0.0...commitlint@1.0.1) (2026-09-20)
+
+
+### Bug Fixes
+
+* **commitlint:** accept the breaking change marker in commit headers ([148c645](https://github.com/Mearman/actions/commit/148c645b4f208706502cce6bfe9df3865cc8ddb8))
+
 # 1.0.0 (2026-09-19)
 
 
